@@ -1,16 +1,19 @@
 import { NextResponse } from 'next/server';
-import dbConnect from '@/lib/db';
-import Review from '@/models/Review';
+import prisma from '@/lib/db';
 
 export async function GET() {
-  await dbConnect();
-  const reviews = await Review.find({}).sort({ createdAt: -1 });
+  const reviews = await prisma.review.findMany({
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
   return NextResponse.json(reviews);
 }
 
 export async function POST(request) {
   const { name, rating, comment } = await request.json();
-  await dbConnect();
-  const review = await Review.create({ name, rating, comment });
+  const review = await prisma.review.create({
+    data: { name, rating, comment },
+  });
   return NextResponse.json(review);
 }
