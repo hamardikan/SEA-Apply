@@ -8,14 +8,25 @@ export default function Reservation() {
   const [service, setService] = useState('Haircuts and styling');
   const [dateTime, setDateTime] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log({ name, phone, service, dateTime });
-    // Reset form
-    setName('');
-    setPhone('');
-    setService('Haircuts and styling');
-    setDateTime('');
+
+    const response = await fetch('/api/reservation', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, phone, service, dateTime }),
+    });
+
+    if (response.ok) {
+      alert('Reservation successful!');
+      // Reset form
+      setName('');
+      setPhone('');
+      setService('Haircuts and styling');
+      setDateTime('');
+    } else {
+      alert('Reservation failed!');
+    }
   };
 
   return (

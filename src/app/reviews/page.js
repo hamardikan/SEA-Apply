@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 export default function Reviews() {
@@ -8,13 +8,34 @@ export default function Reviews() {
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    const fetchReviews = async () => {
+      const response = await fetch('/api/reviews');
+      const data = await response.json();
+      setReviews(data);
+    };
+
+    fetchReviews();
+  }, []);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newReview = { name, rating, comment };
-    setReviews([...reviews, newReview]);
-    setName('');
-    setRating(5);
-    setComment('');
+
+    const response = await fetch('/api/reviews', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newReview),
+    });
+
+    if (response.ok) {
+      setReviews([...reviews, newReview]);
+      setName('');
+      setRating(5);
+      setComment('');
+    } else {
+      alert('Failed to submit review');
+    }
   };
 
   return (
