@@ -15,7 +15,7 @@ export default function RegisterForm() {
 
 
     const handleSubmit = async (e) => {
-        e.preventDefault();       
+        e.preventDefault();
         const newUser = { fullname, email, phone, password, repeatPassword };
         const response = await fetch('/api/register', {
             method: 'POST',
@@ -42,6 +42,9 @@ export default function RegisterForm() {
                     <h1 className="text-5xl font-extrabold text-purple-800 mb-4">Register</h1>
                     <Link href="/" className="text-purple-600 hover:text-purple-800 transition duration-300">
                         ← Back to Home
+                    </Link> <br />
+                    <Link href="/login" className="text-purple-600 hover:text-purple-800 transition duration-300">
+                        Already have an account? Login
                     </Link>
                 </header>
 

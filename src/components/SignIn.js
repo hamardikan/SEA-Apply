@@ -28,6 +28,9 @@ export default function LoginForm({ session }) {
                     <h1 className="text-5xl font-extrabold text-purple-800 mb-4">Login</h1>
                     <Link href="/" className="text-purple-600 hover:text-purple-800 transition duration-300">
                         ← Back to Home
+                    </Link><br />
+                    <Link href="/register" className="text-purple-600 hover:text-purple-800 transition duration-300">
+                        No Account? Register
                     </Link>
                 </header>
 

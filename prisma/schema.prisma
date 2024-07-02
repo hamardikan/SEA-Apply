@@ -39,7 +39,16 @@ model User {
 model Service {
   id          Int           @id @default(autoincrement())
   name        String        @unique
+  duration    Int           @default(60) // Minutes
   Reservation Reservation[]
+}
+
+model Branch {
+  id          Int      @id @default(autoincrement())
+  name        String
+  location    String
+  openingTime DateTime
+  closingTime DateTime
 }
 
 enum Role {

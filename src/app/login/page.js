@@ -7,7 +7,7 @@ export default async function Page() {
 
     switch (session?.user?.role) {
         case "CUSTOMER":
-            redirect("/dashboard");
+            redirect("/");
         case "ADMIN":
             redirect("/dashboard/admin");
         default:

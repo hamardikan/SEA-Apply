@@ -1,8 +1,14 @@
+import { auth } from '@/auth';
+import LogoutButton from '@/components/LogoutButton';
+import Navigations from '@/components/Navigations';
 import { getReviews } from '@/services/reviews';
+import { getServices } from '@/services/services';
 import Link from 'next/link';
 
 export default async function Home() {
   const reviews = await getReviews()
+  const services = await getServices()
+  const session = await auth()
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-100 to-purple-200">
@@ -10,15 +16,16 @@ export default async function Home() {
         <header className="text-center mb-16">
           <h1 className="text-5xl font-extrabold text-purple-800 mb-4">SEA Salon</h1>
           <p className="text-2xl text-purple-600 italic">Beauty and Elegance Redefined</p>
+          <Navigations session={session} />
         </header>
 
         <main>
           <section className="bg-white rounded-lg shadow-lg p-8 mb-12">
             <h2 className="text-3xl font-bold text-purple-800 mb-6">Our Services</h2>
             <ul className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {['Haircuts and Styling', 'Manicure and Pedicure', 'Facial Treatments'].map((service) => (
-                <li key={service} className="bg-purple-100 rounded-lg p-4 text-center hover:bg-purple-200 transition duration-300">
-                  <span className="text-lg font-semibold text-purple-700">{service}</span>
+              {services.map((service) => (
+                <li key={service.id} className="bg-purple-100 rounded-lg p-4 text-center hover:bg-purple-200 transition duration-300">
+                  <span className="text-lg font-semibold text-purple-700">{service.name}</span>
                 </li>
               ))}
             </ul>
@@ -40,22 +47,18 @@ export default async function Home() {
 
           <section className="bg-white rounded-lg shadow-lg p-8 mb-12 text-black">
             <h2 className="text-3xl font-bold text-purple-800 mb-6">Reviews</h2>
-            {reviews.map((review) => <div key={review.id}>
-              <div> {review.name} </div>
-            </div>)}
+            <div className="space-y-6">
+              {reviews.slice(reviews.length - 3, reviews.length).map((review, index) => (
+                <div key={index} className="bg-purple-100 rounded-lg p-4">
+                  <h3 className="font-bold text-purple-800">{review.name}</h3>
+                  <p className="text-yellow-500">{'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}</p>
+                  <p className="text-purple-700 mt-2">{review.comment}</p>
+                </div>
+              ))}
+            </div>
           </section>
 
-          <div className="flex justify-center space-x-4">
-            <Link href="/reviews" className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded transition duration-300">
-              View Reviews
-            </Link>
-            <Link href="/login" className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded transition duration-300">
-              Login
-            </Link>
-            <Link href="/reservation" className="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded transition duration-300">
-              Make a Reservation
-            </Link>
-          </div>
+
         </main>
 
         <footer className="mt-16 text-center text-purple-600">
