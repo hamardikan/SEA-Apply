@@ -37,18 +37,29 @@ model User {
 }
 
 model Service {
-  id          Int           @id @default(autoincrement())
-  name        String        @unique
-  duration    Int           @default(60) // Minutes
-  Reservation Reservation[]
+  id                 Int                  @id @default(autoincrement())
+  name               String               @unique
+  duration           Int                  @default(60) // Minutes
+  Reservation        Reservation[]
+  ServicesOnBranches ServicesOnBranches[]
 }
 
 model Branch {
-  id          Int      @id @default(autoincrement())
-  name        String
-  location    String
-  openingTime DateTime
-  closingTime DateTime
+  id                 Int                  @id @default(autoincrement())
+  name               String
+  location           String
+  openingTime        DateTime
+  closingTime        DateTime
+  ServicesOnBranches ServicesOnBranches[]
+}
+
+model ServicesOnBranches {
+  serviceId Int
+  service   Service @relation(fields: [serviceId], references: [id])
+  branchId  Int
+  branch    Branch  @relation(fields: [branchId], references: [id])
+
+  @@id([serviceId, branchId])
 }
 
 enum Role {
