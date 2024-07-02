@@ -3,7 +3,20 @@ import Credentials from "next-auth/providers/credentials"
 import prisma from "./lib/db";
 import { saltAndHashPassword } from "./lib/utils";
 
+function exclude(user, keys) {
+    return Object.fromEntries(
+        Object.entries(user).filter(([key]) => !keys.includes(key))
+    );
+}
 
+const ADMIN = {
+    id: 0,
+    fullname: "Thomas N",
+    email: "thomas.n@compfest.id",
+    phone: "08123456789",
+    password: "Admin123",
+    role: "ADMIN"
+}
 
 
 const getUserFromDb = async (email, pwHash) => {
@@ -13,10 +26,9 @@ const getUserFromDb = async (email, pwHash) => {
                 email: email
             }
         })
-        console.log("user", user)
-
         if (user.password !== pwHash) return null;
-        return user
+        const userWithoutPassword = exclude(user, ['password'])
+        return userWithoutPassword
     } catch (error) {
         console.error(error);
         return null
@@ -35,14 +47,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             },
             authorize: async (credentials) => {
                 let user = null
-
-                // logic to salt and hash password
-                const { hashedPassword } = await saltAndHashPassword(credentials.password)
-                console.log("hash", hashedPassword)
-
-                // logic to verify if user exists
-                user = await getUserFromDb(credentials.email, hashedPassword)
-
+                if (credentials.email === ADMIN.email && credentials.password === ADMIN.password) {
+                    user = ADMIN
+                } else {
+                    const { hashedPassword } = await saltAndHashPassword(credentials.password)
+                    user = await getUserFromDb(credentials.email, hashedPassword)
+                }
 
                 if (!user) {
                     throw new CredentialsSignin("Wrong email or password");
@@ -55,5 +65,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     ],
     pages: {
         signIn: "/login"
+    },
+    callbacks: {
+        jwt({ token, user }) {
+            if (user) { // User is available during sign-in
+                token.id = user.id
+                token.role = user.role
+            }
+            return token
+        },
+        session({ session, token }) {
+            session.user.id = token.id
+            session.user.role = token.role
+            return session
+        },
     },
 })

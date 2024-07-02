@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 
-export default function RegisterForm() {
+export default function LoginForm({ session }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const onSubmit = async (e) => {
@@ -12,8 +12,13 @@ export default function RegisterForm() {
         const response = await signIn("credentials", {
             email,
             password,
-            callbackUrl: "/dashboard",
-        })
+            redirect: false,
+        });
+        if (response.error) {
+            alert("Invalid credentials")
+        } else {
+            window.location.reload()
+        }
     }
 
     return (
@@ -58,7 +63,7 @@ export default function RegisterForm() {
                         </div>
 
                         <button type="submit" className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded transition duration-300 disabled:cursor-not-allowed">
-                            Register
+                            Login
                         </button>
                     </form>
                 </main>
