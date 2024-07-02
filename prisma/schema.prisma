@@ -21,7 +21,8 @@ model Reservation {
   id        Int      @id @default(autoincrement())
   name      String
   phone     String
-  service   String?
+  serviceId Int?
+  service   Service? @relation(fields: [serviceId], references: [id])
   dateTime  DateTime
   createdAt DateTime @default(now())
 }
@@ -33,6 +34,12 @@ model User {
   phone    String
   password String
   role     Role
+}
+
+model Service {
+  id          Int           @id @default(autoincrement())
+  name        String        @unique
+  Reservation Reservation[]
 }
 
 enum Role {

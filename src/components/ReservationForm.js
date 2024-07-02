@@ -3,10 +3,10 @@
 import { useState } from "react";
 import Link from "next/link";
 
-export default function ReservationForm() {
+export default function ReservationForm({ services }) {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
-  const [service, setService] = useState('Haircuts and styling');
+  const [serviceId, setServiceId] = useState(services[0].id);
   const [date, setDate] = useState('');
   const [time, setTime] = useState('09:00 ~ 10:00');
 
@@ -28,7 +28,7 @@ export default function ReservationForm() {
     const response = await fetch('/api/reservation', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, phone, service, dateTime: isoDateTime }),
+      body: JSON.stringify({ name, phone, serviceId, dateTime: isoDateTime }),
     });
 
     if (response.ok) {
@@ -36,7 +36,7 @@ export default function ReservationForm() {
       // Reset form
       setName('');
       setPhone('');
-      setService('Haircuts and styling');
+      setServiceId(1);
       setDate('');
       setTime('09:00 ~ 10:00');
     } else {
@@ -82,13 +82,13 @@ export default function ReservationForm() {
               <label htmlFor="service" className="block text-purple-700 font-bold mb-2">Service</label>
               <select
                 id="service"
-                value={service}
-                onChange={(e) => setService(e.target.value)}
+                value={serviceId}
+                onChange={(e) => setServiceId(e.target.value)}
                 className="w-full p-2 border border-purple-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-600"
               >
-                <option>Haircuts and styling</option>
-                <option>Manicure and pedicure</option>
-                <option>Facial treatments</option>
+                {services.map((service) => <option key={service.id} value={service.id}>
+                  {service.name}
+                </option>)}
               </select>
             </div>
             <div>
