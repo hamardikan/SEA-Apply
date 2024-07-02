@@ -1,6 +1,9 @@
+import { getReviews } from '@/services/reviews';
 import Link from 'next/link';
 
-export default function Home() {
+export default async function Home() {
+  const reviews = await getReviews()
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-100 to-purple-200">
       <div className="container mx-auto px-4 py-16">
@@ -33,6 +36,13 @@ export default function Home() {
                 <p className="text-lg text-purple-600">08164829372</p>
               </div>
             </div>
+          </section>
+
+          <section className="bg-white rounded-lg shadow-lg p-8 mb-12 text-black">
+            <h2 className="text-3xl font-bold text-purple-800 mb-6">Reviews</h2>
+            {reviews.map((review) => <div key={review.id}>
+              <div> {review.name} </div>
+            </div>)}
           </section>
 
           <div className="flex justify-center space-x-4">

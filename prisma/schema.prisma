@@ -1,6 +1,6 @@
 datasource db {
-  provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
@@ -15,4 +15,20 @@ model Review {
   comment   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Reservation {
+  id        Int      @id @default(autoincrement())
+  name      String
+  phone     String
+  service   Service  @relation(fields: [serviceId], references: [id])
+  serviceId Int
+  dateTime  DateTime
+  createdAt DateTime @default(now())
+}
+
+model Service {
+  id          Int           @id @default(autoincrement())
+  name        String
+  Reservation Reservation[]
 }
