@@ -22,10 +22,10 @@ export default function ReviewForm({ reviews }) {
         });
 
         if (response.ok) {
-            setReviews([...reviews, newReview]);
             setName('');
             setRating(5);
             setComment('');
+            alert('Success to submit review')
         } else {
             alert('Failed to submit review');
         }
@@ -41,7 +41,7 @@ export default function ReviewForm({ reviews }) {
                     </Link>
                 </header>
 
-                <main className="bg-white rounded-lg shadow-lg p-8 mb-12">
+                <main className="bg-white rounded-lg shadow-lg p-8 mb-12 text-black">
                     <form onSubmit={handleSubmit} className="mb-12">
                         <div className="mb-4">
                             <label htmlFor="name" className="block text-purple-700 font-bold mb-2">Your Name</label>

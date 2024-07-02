@@ -1,11 +1,8 @@
 
-import prisma from '@/lib/db'
+
+import { getReviews } from '@/services/reviews'
 import ReviewForm from '../../components/ReviewForm'
 
-export async function getReviews() {
-  const data = await prisma.review.findMany()
-  return data
-}
 
 export default async function Reviews() {
   const reviews = await getReviews()
