@@ -49,6 +49,9 @@ export default async function Home() {
             <Link href="/reviews" className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded transition duration-300">
               View Reviews
             </Link>
+            <Link href="/login" className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+              Login
+            </Link>
             <Link href="/reservation" className="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded transition duration-300">
               Make a Reservation
             </Link>

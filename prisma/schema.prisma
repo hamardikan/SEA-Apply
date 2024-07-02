@@ -25,3 +25,17 @@ model Reservation {
   dateTime  DateTime
   createdAt DateTime @default(now())
 }
+
+model User {
+  id       Int    @id @default(autoincrement())
+  fullname String
+  email    String @unique
+  phone    String
+  password String
+  role     Role
+}
+
+enum Role {
+  ADMIN
+  CUSTOMER
+}
