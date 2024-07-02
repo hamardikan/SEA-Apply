@@ -21,14 +21,7 @@ model Reservation {
   id        Int      @id @default(autoincrement())
   name      String
   phone     String
-  service   Service  @relation(fields: [serviceId], references: [id])
-  serviceId Int
+  service   String?
   dateTime  DateTime
   createdAt DateTime @default(now())
-}
-
-model Service {
-  id          Int           @id @default(autoincrement())
-  name        String
-  Reservation Reservation[]
 }
